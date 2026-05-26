@@ -83,46 +83,45 @@ The Olympics is a daily benchmark system that finds the best model for each god 
 - **Speed** (0-1): Normalized relative to other models in the same event
 - **Composite**: `0.6 × quality + 0.4 × speed` — empty responses get composite = 0
 
-### Current Champions (Round 2)
+### Final Champions (18 Rounds, 16 Models Tested — COMPLETE)
 
-| God | Champion | Composite |
-|-----|----------|-----------|
-| Zeus | qwen3:4b | 0.730 |
-| Athena | phi3.5 | 0.679 |
-| Hephaestus | phi3.5 | 0.850 |
-| Prometheus | phi3.5 | 0.716 |
-| Heracles | phi3.5 | 0.711 |
-| Hermes | qwen3:4b | 0.820 |
-| Aphrodite | qwen3:4b | 0.730 |
-| Demeter | qwen3:4b | 0.730 |
-| Hecate | qwen3:4b | 0.718 |
-| Persephone | phi3.5 | 0.730 |
-| Hestia | phi3.5 | 0.749 |
-| Dionysus | qwen3:4b | 0.730 |
+| God | Champion | Quality | Event |
+|-----|----------|---------|-------|
+| Zeus | qwen3:4b | 0.55 | Thunderbolt (Decisiveness) |
+| Athena | phi4-mini:3.8b | 0.55 | Owl's Eye (Reasoning) |
+| Hephaestus | medgemma1.5:4b | 0.82 | The Forge (Code) |
+| Prometheus | phi4-mini:3.8b | 0.59 | The Heist (Disruption) |
+| Heracles | qwen3:4b | 0.64 | The Labor (Debugging) |
+| Hermes | qwen3:4b | 0.70 | Winged Sandal (Speed) |
+| Aphrodite | qwen3:4b | 0.55 | The Mirror (Beauty) |
+| Demeter | medgemma1.5:4b | 0.57 | The Harvest (Clarity) |
+| Hecate | medgemma1.5:4b | 0.59 | The Veil (Patterns) |
+| Persephone | medgemma1.5:4b | 0.57 | The Descent (Synthesis) |
+| Hestia | granite4.1:3b | 0.67 | The Hearth (Safety) |
+| Dionysus | qwen3:4b | 0.64 | The Bacchanal (Chaos) |
 
-## Roster (17 Models)
+**Top models by event wins**: qwen3:4b (5), medgemma1.5:4b (4), phi4-mini:3.8b (2), granite4.1:3b (1)
 
-8 current + 9 being pulled:
+## Models Tested (16)
 
-| Model | Size | Tier | Strength |
-|-------|------|------|----------|
-| qwen3:4b | 2.5GB | GPU | Speed, coding, general |
-| phi3.5 | 2.0GB | GPU | Compact reasoning |
-| glm4:9b | 5.5GB | GPU | Reasoning, bilingual |
-| qwen2.5-coder:7b | 4.4GB | GPU | Coding specialist |
-| deepseek-r1:8b | 4.9GB | GPU | Reasoning, math |
-| qwen3:8b | 4.9GB | GPU | General purpose |
-| gemma4 | 9.6GB | RAM | All-rounder |
-| glm-4.7-flash | 19GB | RAM | Best quality |
-| **phi4:14b** | 9.1GB | RAM | SOTA general, function calling |
-| **phi4-mini:3.8b** | 2.5GB | GPU | Compact, multilingual, tool use |
-| **qwen3-coder:30b** | 19GB | RAM | Agentic coding |
-| **dolphin3:8b** | 4.9GB | GPU | Uncensored creative |
-| **exaone-deep:7.8b** | 4.8GB | GPU | Math, coding reasoning |
-| **phi4-reasoning:14b** | 11GB | RAM | Deep chain-of-thought |
-| **command-r7b:7b** | 5.1GB | GPU | Tool use, RAG |
-| **granite4.1:8b** | 5.3GB | GPU | Enterprise, multilingual |
-| **lfm2.5-thinking:1.2b** | 1.2GB | GPU | Ultra-tiny thinking |
+| Model | Size | Tier | Events Won |
+|-------|------|------|------------|
+| qwen3:4b | 2.4GB | GPU | 5 — Zeus, Heracles, Hermes, Aphrodite, Dionysus |
+| medgemma1.5:4b | 2.8GB | GPU | 4 — Hephaestus, Demeter, Hecate, Persephone |
+| phi4-mini:3.8b | 2.3GB | GPU | 2 — Athena, Prometheus |
+| granite4.1:3b | 2.0GB | GPU | 1 — Hestia |
+| phi3.5 | 2.2GB | GPU | 0 |
+| lfm2.5-thinking:1.2b | 0.9GB | GPU | 0 |
+| qwen3:8b | 4.9GB | GPU | 0 |
+| qwen2.5-coder:7b | 4.7GB | GPU | 0 |
+| deepseek-r1:8b | 4.7GB | GPU | 0 |
+| glm4:9b | 5.5GB | GPU | 0 |
+| qwen3.5:4b | 2.8GB | GPU | 0 |
+| qwen3.5:2b | 1.5GB | GPU | 0 |
+| granite4.1:8b | 5.3GB | GPU | 0 |
+| qwen3.5:9b | 5.5GB | RAM | 0 |
+| gemma4 | 9.6GB | RAM | 0 |
+| phi4:14b | 9.1GB | RAM | 0 |
 
 ## File Structure
 
@@ -155,8 +154,10 @@ Rog: C:\Users\aaron\Desktop\dev\the-olympics\
 
 ## Evolution
 
-Round 1: qwen3:4b vs glm4:9b → qwen3:4b won speed, glm4:9b won quality
-Round 2: +4 models → phi3.5 dominated 6 gods, qwen3:4b won 6 by speed
-Round 3 (upcoming): +9 new models including phi4, dolphin3, qwen3-coder → expecting major shifts
+- **Round 1-2**: qwen3:4b vs glm4:9b → qwen3:4b won speed, glm4:9b won quality
+- **Round 3-8**: +4 models → phi3.5 dominated 6 gods, qwen3:4b won 6 by speed
+- **Round 9-14**: +6 new models (phi4-mini, granite4.1, medgemma, qwen3.5) → major shifts, medgemma1.5:4b won 4 events
+- **Round 15-18**: RAM-tier models tested (gemma4, phi4:14b, qwen3.5:9b) → slower but competitive quality
+- **Final**: 16 models, 18 rounds — qwen3:4b (5 wins), medgemma1.5:4b (4 wins), phi4-mini:3.8b (2), granite4.1:3b (1)
 
-Models that score lowest in their domain get evicted when disk space is needed. The Olympics runs daily at 03:00 — champions improve over time without human intervention.
+Olympics is complete. Future rounds will run when new models arrive.

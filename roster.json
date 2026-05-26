@@ -1,0 +1,165 @@
+{
+  "models": [
+    {
+      "id": "qwen3:4b",
+      "tier": "gpu",
+      "size": "2.5GB",
+      "family": "Qwen",
+      "strength": "Speed, coding, general"
+    },
+    {
+      "id": "glm4:9b",
+      "tier": "gpu",
+      "size": "5.5GB",
+      "family": "GLM",
+      "strength": "Reasoning, bilingual"
+    },
+    {
+      "id": "gemma4:latest",
+      "tier": "ram",
+      "size": "9.6GB",
+      "family": "Google",
+      "strength": "All-rounder, quality"
+    },
+    {
+      "id": "glm-4.7-flash:latest",
+      "tier": "ram",
+      "size": "19GB",
+      "family": "GLM",
+      "strength": "Best quality (slow)"
+    },
+    {
+      "id": "qwen2.5-coder:7b",
+      "tier": "gpu",
+      "size": "4.4GB",
+      "family": "Qwen",
+      "strength": "Coding specialist"
+    },
+    {
+      "id": "deepseek-r1:8b",
+      "tier": "gpu",
+      "size": "4.9GB",
+      "family": "DeepSeek",
+      "strength": "Reasoning, math, analysis"
+    },
+    {
+      "id": "phi3.5",
+      "tier": "gpu",
+      "size": "2.0GB",
+      "family": "Microsoft",
+      "strength": "Compact reasoning"
+    },
+    {
+      "id": "qwen3:8b",
+      "tier": "gpu",
+      "size": "4.9GB",
+      "family": "Qwen",
+      "strength": "General purpose, balanced"
+    },
+    {
+      "id": "phi4:14b",
+      "tier": "ram",
+      "size": "9.1GB",
+      "family": "Microsoft",
+      "strength": "SOTA general, reasoning, function calling"
+    },
+    {
+      "id": "phi4-mini:3.8b",
+      "tier": "gpu",
+      "size": "2.5GB",
+      "family": "Microsoft",
+      "strength": "Compact, multilingual, tool use"
+    },
+    {
+      "id": "qwen3-coder:30b",
+      "tier": "ram",
+      "size": "19GB",
+      "family": "Qwen",
+      "strength": "Agentic coding, long context"
+    },
+    {
+      "id": "dolphin3:8b",
+      "tier": "gpu",
+      "size": "4.9GB",
+      "family": "Uncensored",
+      "strength": "Creative, uncensored, roleplay"
+    },
+    {
+      "id": "exaone-deep:7.8b",
+      "tier": "gpu",
+      "size": "4.8GB",
+      "family": "LG",
+      "strength": "Math, coding reasoning, bilingual"
+    },
+    {
+      "id": "phi4-reasoning:14b",
+      "tier": "ram",
+      "size": "11GB",
+      "family": "Microsoft",
+      "strength": "Deep chain-of-thought reasoning"
+    },
+    {
+      "id": "command-r7b:7b",
+      "tier": "gpu",
+      "size": "5.1GB",
+      "family": "Cohere",
+      "strength": "Tool use, RAG, instruction following"
+    },
+    {
+      "id": "granite4.1:8b",
+      "tier": "gpu",
+      "size": "5.3GB",
+      "family": "IBM",
+      "strength": "Enterprise, multilingual, structured"
+    },
+    {
+      "id": "lfm2.5-thinking:1.2b",
+      "tier": "gpu",
+      "size": "1.2GB",
+      "family": "Liquid",
+      "strength": "Ultra-tiny thinking model"
+    },
+    {
+      "id": "qwen3.5:9b",
+      "tier": "ram",
+      "size": "5.5GB",
+      "family": "Qwen",
+      "strength": "Newest Qwen, agentic coding"
+    },
+    {
+      "id": "qwen3.5:4b",
+      "tier": "gpu",
+      "size": "2.8GB",
+      "family": "Qwen",
+      "strength": "Newest Qwen compact, tools"
+    },
+    {
+      "id": "qwen3.5:2b",
+      "tier": "gpu",
+      "size": "1.5GB",
+      "family": "Qwen",
+      "strength": "Tiny Qwen, fast inference"
+    },
+    {
+      "id": "granite4.1:3b",
+      "tier": "gpu",
+      "size": "2.0GB",
+      "family": "IBM",
+      "strength": "Enterprise, structured JSON"
+    },
+    {
+      "id": "medgemma1.5:4b",
+      "tier": "gpu",
+      "size": "2.8GB",
+      "family": "Google",
+      "strength": "Medical specialist, vision"
+    },
+    {
+      "id": "laguna-xs.2",
+      "tier": "ram",
+      "size": "~20GB",
+      "family": "Liquid",
+      "strength": "MoE 3B active, agentic coding"
+    }
+  ]
+}

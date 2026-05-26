@@ -334,6 +334,7 @@
   <div class="arena-stat"><div class="num" id="stat-models">-</div><div class="label">Models</div></div>
   <div class="arena-stat"><div class="num" id="stat-events">-</div><div class="label">Events Run</div></div>
   <div class="arena-stat"><div class="num" id="stat-runs">-</div><div class="label">Arena Days</div></div>
+  <div class="arena-stat"><div class="num" id="stat-routing">-</div><div class="label">Routing Accuracy</div></div>
 </div>
 
 <div class="status-bar live">
@@ -396,10 +397,33 @@ let currentSort = "composite";
 
 async function loadData() {
   try {
-    const resp = await fetch("history.json");
-    history = await resp.json();
+    const [histResp, rosterResp, benchResp] = await Promise.all([
+      fetch("history.json"),
+      fetch("roster.json").catch(() => null),
+      fetch("benchmark_results.json").catch(() => null),
+    ]);
+    history = await histResp.json();
+    // Build tier lookup from roster
+    if (rosterResp) {
+      const rosterData = await rosterResp.json();
+      window.tierMap = {};
+      rosterData.models?.forEach(m => { window.tierMap[m.id] = m.tier || "gpu"; });
+    } else {
+      window.tierMap = {};
+    }
+    // Load benchmark routing accuracy
+    if (benchResp) {
+      const benchData = await benchResp.json();
+      const mog = benchData.mog_results || [];
+      const valid = mog.filter(r => r.routed_god && r.routed_god !== "?");
+      if (valid.length > 0) {
+        const correct = valid.filter(r => r.correct_god).length;
+        document.getElementById("stat-routing").textContent = Math.round((correct / valid.length) * 100) + "%";
+      }
+    }
   } catch {
     history = [];
+    window.tierMap = {};
   }
   render();
 }
@@ -426,7 +450,7 @@ function updateStats() {
 }
 
 function renderPodium() {
-  // Aggregate composite scores per model across all runs
+  // Aggregate composite scores per model across all runs, separated by tier
   const modelScores = {};
   history.forEach(run => {
     run.events?.forEach(e => {
@@ -438,35 +462,53 @@ function renderPodium() {
     });
   });
 
-  const sorted = Object.entries(modelScores)
-    .map(([model, s]) => ({ model, avg: s.total / s.count, events: s.count }))
-    .sort((a, b) => b.avg - a.avg)
-    .slice(0, 3);
+  const allSorted = Object.entries(modelScores)
+    .map(([model, s]) => ({
+      model,
+      avg: s.total / s.count,
+      events: s.count,
+      tier: (window.tierMap && window.tierMap[model]) || "gpu"
+    }))
+    .sort((a, b) => b.avg - a.avg);
 
   const podium = document.getElementById("podium");
-  if (sorted.length === 0) {
+  if (allSorted.length === 0) {
     podium.innerHTML = '<div style="text-align:center;color:var(--muted);padding:40px;">Awaiting arena results...</div>';
     return;
   }
 
   const medals = ["gold", "silver", "bronze"];
   const medalEmoji = ["\uD83E\uDD47", "\uD83E\uDD48", "\uD83E\uDD49"];
-  const order = sorted.length >= 3 ? [1, 0, 2] : sorted.map((_, i) => i);
 
-  podium.innerHTML = order.map(idx => {
-    if (idx >= sorted.length) return "";
-    const s = sorted[idx];
-    const tier = s.model.includes("coder") || s.model.includes(":3") || s.model.includes(":4") || s.model.includes(":6") ? "gpu" : "ram";
-    return `
-      <div class="podium-slot ${medals[idx] || ""}">
-        <div class="podium-rank">${medalEmoji[idx] || idx + 1}</div>
-        <div class="podium-model">${s.model}</div>
-        <div class="podium-score">${s.avg.toFixed(3)}</div>
-        <span class="tier-badge tier-${tier}">${tier.toUpperCase()}</span>
-        <div class="podium-meta">${s.events} events, avg composite</div>
-      </div>
-    `;
-  }).join("");
+  // GPU podium (top 3 GPU models)
+  const gpuSorted = allSorted.filter(s => s.tier === "gpu").slice(0, 3);
+  const ramSorted = allSorted.filter(s => s.tier === "ram").slice(0, 3);
+
+  function renderTierPodium(models, tierLabel, tierColor) {
+    if (models.length === 0) return "";
+    const order = models.length >= 3 ? [1, 0, 2] : models.map((_, i) => i);
+    return `<div style="flex:1;min-width:280px"><div style="text-align:center;margin-bottom:10px;font-size:0.85rem;color:${tierColor};letter-spacing:1px">${tierLabel} TIER</div>
+    <div style="display:flex;justify-content:center;align-items:flex-end;gap:12px">
+    ${order.map(idx => {
+      if (idx >= models.length) return "";
+      const s = models[idx];
+      return `
+        <div class="podium-slot ${medals[idx] || ""}" style="${idx === 0 ? 'min-height:200px' : 'min-height:170px'}">
+          <div class="podium-rank">${medalEmoji[idx] || idx + 1}</div>
+          <div class="podium-model">${s.model}</div>
+          <div class="podium-score">${s.avg.toFixed(3)}</div>
+          <span class="tier-badge tier-${s.tier}">${s.tier.toUpperCase()}</span>
+          <div class="podium-meta">${s.events} events</div>
+        </div>
+      `;
+    }).join("")}
+    </div></div>`;
+  }
+
+  podium.style.display = "flex";
+  podium.style.gap = "30px";
+  podium.style.flexWrap = "wrap";
+  podium.innerHTML = renderTierPodium(gpuSorted, "GPU", "var(--gpu)") + renderTierPodium(ramSorted, "RAM", "var(--ram)");
 }
 
 function renderLeaderboard() {
@@ -514,7 +556,7 @@ function renderLeaderboard() {
   grid.innerHTML = Object.entries(GODS).map(([god, cfg]) => {
     const champ = godChampion[god];
     const runners = godRunnerUp[god] || [];
-    const tier = champ?.tier || "gpu";
+    const tier = (champ && window.tierMap && window.tierMap[champ.model]) || champ?.tier || "gpu";
     return `
       <div class="god-card">
         <div class="god-header">

@@ -1,0 +1,174 @@
+{
+  "date": "2026-05-26T22:19:55.762788",
+  "mog_results": [
+    {
+      "task_id": "code-lru",
+      "domain": "coding",
+      "expected_god": "Hephaestus",
+      "routed_god": "Hermes",
+      "routed_model": "qwen3:4b",
+      "correct_god": false,
+      "wall_sec": 231.0,
+      "speed": 14.6,
+      "response_len": 0,
+      "present": false,
+      "score": 0.0,
+      "reason": "error or empty"
+    },
+    {
+      "task_id": "code-linkedlist",
+      "domain": "coding",
+      "expected_god": "Hephaestus",
+      "routed_god": "?",
+      "routed_model": "?",
+      "correct_god": false,
+      "wall_sec": 300.0,
+      "speed": 0,
+      "response_len": 0,
+      "present": false,
+      "score": 0.0,
+      "reason": "error or empty"
+    },
+    {
+      "task_id": "debug-race",
+      "domain": "debugging",
+      "expected_god": "Heracles",
+      "routed_god": "?",
+      "routed_model": "?",
+      "correct_god": false,
+      "wall_sec": 300.0,
+      "speed": 0,
+      "response_len": 0,
+      "present": false,
+      "score": 0.0,
+      "reason": "error or empty"
+    },
+    {
+      "task_id": "debug-memory",
+      "domain": "debugging",
+      "expected_god": "Heracles",
+      "routed_god": "?",
+      "routed_model": "?",
+      "correct_god": false,
+      "wall_sec": 300.0,
+      "speed": 0,
+      "response_len": 0,
+      "present": false,
+      "score": 0.0,
+      "reason": "error or empty"
+    },
+    {
+      "task_id": "security-sqli",
+      "domain": "security",
+      "expected_god": "Hecate",
+      "routed_god": "?",
+      "routed_model": "?",
+      "correct_god": false,
+      "wall_sec": 300.0,
+      "speed": 0,
+      "response_len": 0,
+      "present": false,
+      "score": 0.0,
+      "reason": "error or empty"
+    }
+  ],
+  "direct_results": {
+    "qwen3:4b": [
+      {
+        "task_id": "code-lru",
+        "domain": "coding",
+        "wall_sec": 300.0,
+        "response_len": 0,
+        "present": false,
+        "score": 0.0,
+        "reason": "error or empty"
+      },
+      {
+        "task_id": "code-linkedlist",
+        "domain": "coding",
+        "wall_sec": 329.5,
+        "response_len": 0,
+        "present": false,
+        "score": 0.0,
+        "reason": "error or empty"
+      },
+      {
+        "task_id": "debug-race",
+        "domain": "debugging",
+        "wall_sec": 135.0,
+        "response_len": 0,
+        "present": false,
+        "score": 0.0,
+        "reason": "error or empty"
+      },
+      {
+        "task_id": "debug-memory",
+        "domain": "debugging",
+        "wall_sec": 300.0,
+        "response_len": 0,
+        "present": false,
+        "score": 0.0,
+        "reason": "error or empty"
+      },
+      {
+        "task_id": "security-sqli",
+        "domain": "security",
+        "wall_sec": 245.4,
+        "response_len": 2515,
+        "present": true,
+        "score": 1.0,
+        "words": 322,
+        "length": 2515
+      }
+    ],
+    "phi3.5": [
+      {
+        "task_id": "code-lru",
+        "domain": "coding",
+        "wall_sec": 274.0,
+        "response_len": 1136,
+        "present": true,
+        "score": 1.0,
+        "words": 119,
+        "length": 1136
+      },
+      {
+        "task_id": "code-linkedlist",
+        "domain": "coding",
+        "wall_sec": 96.7,
+        "response_len": 5218,
+        "present": true,
+        "score": 0.8,
+        "words": 588,
+        "length": 5218
+      },
+      {
+        "task_id": "debug-race",
+        "domain": "debugging",
+        "wall_sec": 9.1,
+        "response_len": 0,
+        "present": false,
+        "score": 0.0,
+        "reason": "error or empty"
+      },
+      {
+        "task_id": "debug-memory",
+        "domain": "debugging",
+        "wall_sec": 45.7,
+        "response_len": 0,
+        "present": false,
+        "score": 0.0,
+        "reason": "error or empty"
+      },
+      {
+        "task_id": "security-sqli",
+        "domain": "security",
+        "wall_sec": 3.6,
+        "response_len": 0,
+        "present": false,
+        "score": 0.0,
+        "reason": "error or empty"
+      }
+    ]
+  }
+}

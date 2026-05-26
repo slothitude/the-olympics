@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Olympics of the Gods — MoG Model Selection Arena</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --gold: #d4a017;
+    --silver: #c0c0c0;
+    --bronze: #cd7f32;
+    --dark: #0a0a0f;
+    --darker: #06060a;
+    --card: #12121a;
+    --border: #1e1e2e;
+    --text: #e0e0e8;
+    --muted: #6b6b80;
+    --accent: #8b5cf6;
+    --fire: #ef4444;
+    --gpu: #22d3ee;
+    --ram: #a78bfa;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--dark);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* Hero */
+  .hero {
+    text-align: center;
+    padding: 60px 20px 40px;
+    background: linear-gradient(180deg, #0f0a1a 0%, var(--dark) 100%);
+    border-bottom: 1px solid var(--border);
+  }
+  .hero h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 3rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--gold), #f5d060, var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+  }
+  .hero .subtitle {
+    color: var(--muted);
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+  }
+
+  /* Arena info */
+  .arena-info {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 20px;
+    flex-wrap: wrap;
+  }
+  .arena-stat {
+    text-align: center;
+  }
+  .arena-stat .num {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--gold);
+  }
+  .arena-stat .label {
+    color: var(--muted);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Podium */
+  .podium-section {
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .podium-section h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    color: var(--gold);
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .podium {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 16px;
+    margin-bottom: 50px;
+  }
+  .podium-slot {
+    text-align: center;
+    padding: 20px 24px;
+    border-radius: 12px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    transition: transform 0.3s;
+    min-width: 200px;
+  }
+  .podium-slot:hover { transform: translateY(-4px); }
+  .podium-slot.gold {
+    border-color: var(--gold);
+    box-shadow: 0 0 30px rgba(212,160,23,0.2);
+    min-height: 260px;
+  }
+  .podium-slot.silver {
+    border-color: var(--silver);
+    min-height: 220px;
+  }
+  .podium-slot.bronze {
+    border-color: var(--bronze);
+    min-height: 190px;
+  }
+  .podium-rank {
+    font-family: 'Cinzel', serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+  }
+  .podium-slot.gold .podium-rank { color: var(--gold); }
+  .podium-slot.silver .podium-rank { color: var(--silver); }
+  .podium-slot.bronze .podium-rank { color: var(--bronze); }
+  .podium-model {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 8px 0 4px;
+  }
+  .podium-score {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--gold);
+  }
+  .podium-meta {
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+
+  /* God leaderboard */
+  .leaderboard-section {
+    padding: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .leaderboard-section h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    color: var(--text);
+    margin-bottom: 20px;
+    padding-left: 10px;
+  }
+
+  .leaderboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 16px;
+  }
+
+  .god-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.3s;
+  }
+  .god-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 20px rgba(139,92,246,0.15);
+  }
+
+  .god-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .god-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+  }
+  .god-name {
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+  .god-event {
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .god-winner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: rgba(212,160,23,0.1);
+    border: 1px solid rgba(212,160,23,0.3);
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+  .medal { font-size: 1.2rem; }
+  .winner-model { font-weight: 700; font-size: 0.95rem; }
+  .winner-score {
+    margin-left: auto;
+    color: var(--gold);
+    font-weight: 600;
+    font-size: 0.85rem;
+  }
+
+  /* History table */
+  .history-section {
+    padding: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .history-section h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    color: var(--text);
+    margin-bottom: 20px;
+    padding-left: 10px;
+  }
+
+  .history-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+  .history-table th {
+    text-align: left;
+    padding: 10px;
+    border-bottom: 2px solid var(--border);
+    color: var(--muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.75rem;
+  }
+  .history-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .history-table tr:hover td {
+    background: rgba(139,92,246,0.05);
+  }
+
+  /* Tier badges */
+  .tier-badge {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .tier-gpu { background: rgba(34,211,238,0.15); color: var(--gpu); }
+  .tier-ram { background: rgba(167,139,250,0.15); color: var(--ram); }
+
+  /* Status */
+  .status-bar {
+    text-align: center;
+    padding: 15px;
+    color: var(--muted);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+  .status-bar.live { color: var(--fire); }
+
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+  .live-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: var(--fire);
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+    margin-right: 6px;
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 20px;
+    padding: 0 10px;
+  }
+  .tab {
+    padding: 8px 20px;
+    border-radius: 8px 8px 0 0;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-bottom: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+  .tab.active {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>THE OLYMPICS</h1>
+  <div class="subtitle">MIXTURE OF GODS — MODEL SELECTION ARENA</div>
+</div>
+
+<div class="arena-info" id="arena-info">
+  <div class="arena-stat"><div class="num">12</div><div class="label">Gods</div></div>
+  <div class="arena-stat"><div class="num" id="stat-models">-</div><div class="label">Models</div></div>
+  <div class="arena-stat"><div class="num" id="stat-events">-</div><div class="label">Events Run</div></div>
+  <div class="arena-stat"><div class="num" id="stat-runs">-</div><div class="label">Arena Days</div></div>
+</div>
+
+<div class="status-bar live">
+  <span class="live-dot"></span>
+  ARENA ACTIVE — MoG Router at Lappy:5500 — Ollama RTX 3060 6GB VRAM + 40GB RAM
+</div>
+
+<!-- Podium -->
+<div class="podium-section">
+  <h2>THE PODIUM — BEST OVERALL MODELS</h2>
+  <div class="podium" id="podium"></div>
+</div>
+
+<!-- God Leaderboard -->
+<div class="leaderboard-section">
+  <h2>CHAMPION PER GOD — CURRENT MoG ASSIGNMENTS</h2>
+  <div class="leaderboard-grid" id="leaderboard"></div>
+</div>
+
+<!-- History -->
+<div class="history-section">
+  <h2>HISTORY</h2>
+  <div class="tabs">
+    <div class="tab active" onclick="showHistory('composite')">Composite</div>
+    <div class="tab" onclick="showHistory('quality')">Quality</div>
+    <div class="tab" onclick="showHistory('speed')">Speed</div>
+  </div>
+  <table class="history-table" id="history-table">
+    <thead>
+      <tr>
+        <th>Date</th><th>Model</th><th>God</th><th>Event</th><th>Quality</th><th>Speed</th><th>Composite</th>
+      </tr>
+    </thead>
+    <tbody id="history-body"></tbody>
+  </table>
+</div>
+
+<div class="status-bar">
+  Olympics of the Gods — Mixture of Gods (MoG) — Pantheon Model Selection — slothitude.github.io/the-olympics
+</div>
+
+<script>
+const GODS = {
+  "Zeus":       { icon: "\u26A1", color: "#fbbf24", event: "Thunderbolt", metric: "Decisiveness", archetype: "Ruler" },
+  "Athena":     { icon: "\uD83E\uDD89", color: "#8b5cf6", event: "Owl's Eye", metric: "Reasoning", archetype: "Sage" },
+  "Hephaestus": { icon: "\uD83D\uDD28", color: "#f97316", event: "The Forge", metric: "Code", archetype: "Creator" },
+  "Prometheus": { icon: "\uD83D\uDD25", color: "#ef4444", event: "The Heist", metric: "Disruption", archetype: "Rebel" },
+  "Heracles":   { icon: "\uD83D\uDCAA", color: "#22c55e", event: "The Labor", metric: "Debugging", archetype: "Hero" },
+  "Hermes":     { icon: "\uD83D\uDC5F", color: "#06b6d4", event: "Winged Sandal", metric: "Speed", archetype: "Explorer" },
+  "Aphrodite":  { icon: "\uD83C\uDF39", color: "#ec4899", event: "The Mirror", metric: "Beauty", archetype: "Lover" },
+  "Demeter":    { icon: "\uD83C\uDF3E", color: "#84cc16", event: "The Harvest", metric: "Clarity", archetype: "Caregiver" },
+  "Hecate":     { icon: "\uD83C\uDF19", color: "#7c3aed", event: "The Veil", metric: "Patterns", archetype: "Magician" },
+  "Persephone": { icon: "\uD83C\uDF38", color: "#d946ef", event: "The Descent", metric: "Synthesis", archetype: "Orphan" },
+  "Hestia":     { icon: "\uD83C\uDFE0", color: "#fb923c", event: "The Hearth", metric: "Safety", archetype: "Innocent" },
+  "Dionysus":   { icon: "\uD83C\uDF77", color: "#f43f5e", event: "The Bacchanal", metric: "Chaos", archetype: "Jester" },
+};
+
+let history = [];
+let currentSort = "composite";
+
+async function loadData() {
+  try {
+    const resp = await fetch("history.json");
+    history = await resp.json();
+  } catch {
+    history = [];
+  }
+  render();
+}
+
+function render() {
+  updateStats();
+  renderPodium();
+  renderLeaderboard();
+  renderHistory();
+}
+
+function updateStats() {
+  const models = new Set();
+  let totalEvents = 0;
+  history.forEach(run => {
+    run.events?.forEach(e => {
+      if (e.model) models.add(e.model);
+      totalEvents++;
+    });
+  });
+  document.getElementById("stat-models").textContent = models.size || "-";
+  document.getElementById("stat-events").textContent = totalEvents || "-";
+  document.getElementById("stat-runs").textContent = history.length || "-";
+}
+
+function renderPodium() {
+  // Aggregate composite scores per model across all runs
+  const modelScores = {};
+  history.forEach(run => {
+    run.events?.forEach(e => {
+      if (e.composite !== undefined) {
+        if (!modelScores[e.model]) modelScores[e.model] = { total: 0, count: 0, wins: 0 };
+        modelScores[e.model].total += e.composite;
+        modelScores[e.model].count++;
+      }
+    });
+  });
+
+  const sorted = Object.entries(modelScores)
+    .map(([model, s]) => ({ model, avg: s.total / s.count, events: s.count }))
+    .sort((a, b) => b.avg - a.avg)
+    .slice(0, 3);
+
+  const podium = document.getElementById("podium");
+  if (sorted.length === 0) {
+    podium.innerHTML = '<div style="text-align:center;color:var(--muted);padding:40px;">Awaiting arena results...</div>';
+    return;
+  }
+
+  const medals = ["gold", "silver", "bronze"];
+  const medalEmoji = ["\uD83E\uDD47", "\uD83E\uDD48", "\uD83E\uDD49"];
+  const order = sorted.length >= 3 ? [1, 0, 2] : sorted.map((_, i) => i);
+
+  podium.innerHTML = order.map(idx => {
+    if (idx >= sorted.length) return "";
+    const s = sorted[idx];
+    const tier = s.model.includes("coder") || s.model.includes(":3") || s.model.includes(":4") || s.model.includes(":6") ? "gpu" : "ram";
+    return `
+      <div class="podium-slot ${medals[idx] || ""}">
+        <div class="podium-rank">${medalEmoji[idx] || idx + 1}</div>
+        <div class="podium-model">${s.model}</div>
+        <div class="podium-score">${s.avg.toFixed(3)}</div>
+        <span class="tier-badge tier-${tier}">${tier.toUpperCase()}</span>
+        <div class="podium-meta">${s.events} events, avg composite</div>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderLeaderboard() {
+  const grid = document.getElementById("leaderboard");
+
+  // Aggregate composite scores: god -> model -> [scores]
+  const godModelScores = {};
+  history.forEach(run => {
+    run.events?.forEach(e => {
+      if (e.composite !== undefined && e.god && e.model) {
+        if (!godModelScores[e.god]) godModelScores[e.god] = {};
+        if (!godModelScores[e.god][e.model]) godModelScores[e.god][e.model] = [];
+        godModelScores[e.god][e.model].push(e);
+      }
+    });
+  });
+
+  // Determine champion per god: highest avg composite
+  const godChampion = {};
+  for (const [god, models] of Object.entries(godModelScores)) {
+    let bestModel = null, bestAvg = -1;
+    for (const [model, events] of Object.entries(models)) {
+      const avg = events.reduce((s, e) => s + e.composite, 0) / events.length;
+      const avgSpeed = events.reduce((s, e) => s + (e.speed || 0), 0) / events.length;
+      if (avg > bestAvg) { bestAvg = avg; bestModel = { model, avg, avgSpeed, events, tier: events[0]?.tier || "gpu" }; }
+    }
+    godChampion[god] = bestModel;
+  }
+
+  // Also compute runner-up
+  const godRunnerUp = {};
+  for (const [god, models] of Object.entries(godModelScores)) {
+    const ranked = Object.entries(models)
+      .map(([model, events]) => ({
+        model,
+        avg: events.reduce((s, e) => s + e.composite, 0) / events.length,
+        avgSpeed: events.reduce((s, e) => s + (e.speed || 0), 0) / events.length,
+        tier: events[0]?.tier || "gpu",
+        events
+      }))
+      .sort((a, b) => b.avg - a.avg);
+    godRunnerUp[god] = ranked.slice(0, 3);
+  }
+
+  grid.innerHTML = Object.entries(GODS).map(([god, cfg]) => {
+    const champ = godChampion[god];
+    const runners = godRunnerUp[god] || [];
+    const tier = champ?.tier || "gpu";
+    return `
+      <div class="god-card">
+        <div class="god-header">
+          <div class="god-icon" style="background:${cfg.color}22;color:${cfg.color}">${cfg.icon}</div>
+          <div>
+            <div class="god-name">${god}</div>
+            <div class="god-event">${cfg.event} — ${cfg.metric}</div>
+          </div>
+        </div>
+        <div class="god-winner">
+          <span class="medal">${champ ? "\uD83D\uDC51" : "\u23F3"}</span>
+          <span class="winner-model">${champ ? champ.model : "Pending..."}</span>
+          <span class="winner-score">${champ ? champ.avg.toFixed(3) : ""}</span>
+        </div>
+        ${champ ? `<span class="tier-badge tier-${tier}">${tier.toUpperCase()}</span> ${champ.avgSpeed.toFixed(1)} tok/s` : ""}
+        ${runners.length > 1 ? `<div style="margin-top:8px;font-size:0.75rem;color:var(--muted);">${runners.slice(1).map((r, i) =>
+          `<div style="display:flex;justify-content:space-between;padding:2px 0;"><span>${i === 0 ? "\uD83E\uDD48" : "\uD83E\uDD49"} ${r.model}</span><span>${r.avg.toFixed(3)}</span></div>`
+        ).join("")}</div>` : ""}
+      </div>
+    `;
+  }).join("");
+}
+
+function renderHistory() {
+  const tbody = document.getElementById("history-body");
+  // Flatten all events and sort
+  const flat = [];
+  history.forEach(run => {
+    run.events?.forEach(e => {
+      flat.push({ ...e, date: run.date?.split("T")[0] || "?" });
+    });
+  });
+
+  flat.sort((a, b) => (b[currentSort] || 0) - (a[currentSort] || 0));
+
+  tbody.innerHTML = flat.slice(0, 100).map(e => `
+    <tr>
+      <td>${e.date}</td>
+      <td>${e.model || "?"}</td>
+      <td>${e.god || "?"}</td>
+      <td>${e.event || "?"}</td>
+      <td>${e.quality !== undefined ? e.quality.toFixed(3) : "-"}</td>
+      <td>${e.speed || "-"}</td>
+      <td>${e.composite !== undefined ? e.composite.toFixed(3) : "-"}</td>
+    </tr>
+  `).join("");
+}
+
+function showHistory(sort) {
+  currentSort = sort;
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  event.target.classList.add("active");
+  renderHistory();
+}
+
+loadData();
+setInterval(loadData, 30000);
+</script>
+</body>
+</html>
